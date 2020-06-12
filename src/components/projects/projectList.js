@@ -1,13 +1,26 @@
 import React from 'react'
 import ProjectSummary from './projectSummary'
-const ProjectList = ({ projects }) => {
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+const ProjectList = ({ projects, auth }) => {
    return (
-      <div className="project-list section">
-         {projects && projects.map(project => {
-            return (<ProjectSummary project={project} key={project.id} />)
-         })}
-      </div>
+      auth.uid ?
+         <div className="project-list section">
+            {projects && projects.map(project => {
+               return (
+                  <Link to={'/project/' + project.id}>
+                     <ProjectSummary project={project} key={project.id} />
+                  </Link>
+               )
+            })}
+         </div> : <Redirect to='/signin'></Redirect>
    )
 }
 
-export default ProjectList
+const mapStateToProps = (state) => {
+   return {
+      auth: state.firebase.auth
+   }
+}
+
+export default connect(mapStateToProps)(ProjectList)
