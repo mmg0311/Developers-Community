@@ -33,14 +33,19 @@ export const signUp = (newUser) => {
          newUser.password
       ).then((res) => {
          // res.user
-         return firestore.collections('users').doc(res.user.uid).set({
+         // console.log('auth created');
+         // console.log(res.user.uid);
+         firestore.collection('users').doc(res.user.uid).set({
             firstName: newUser.firstName,
             lastName: newUser.lastName,
             initials: newUser.firstName[0] + newUser.lastName[0]
          })
+         // console.log('users collection')
       }).then(() => {
+         // console.log('signup success');
          dispatch({ type: 'SIGNUP_SUCCESS' })
       }).catch((error) => {
+         // console.log(error);
          dispatch({ type: 'SIGNUP_FAILURE', error })
       })
    }
